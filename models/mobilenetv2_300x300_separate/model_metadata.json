@@ -1,0 +1,22 @@
+{
+    "model_type": "MobileNetV2",
+    "input_size": [
+        300,
+        300,
+        3
+    ],
+    "classes": [
+        "early_blight_leaf",
+        "healthy_leaf",
+        "late_blight_leaf",
+        "septoria_leaf"
+    ],
+    "date_trained": "2025-09-09 22:33:38",
+    "keras_version": "3.11.3",
+    "tensorflow_version": "2.20.0",
+    "phases": {
+        "phase1_best_model": "best_model_phase1.h5",
+        "phase2_best_model": "best_model_phase2.h5",
+        "combined_best_model": "best_model.h5"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "standard": {
+        "accuracy": 0.915,
+        "evaluation_time_seconds": 35.1164014339447,
+        "file_size_mb": 15.462642669677734
+    },
+    "quantized": {
+        "accuracy": 0.9175,
+        "evaluation_time_seconds": 139.5727834701538,
+        "file_size_mb": 4.160926818847656,
+        "speedup": 0.2515992055245784
+    }
+}
