@@ -17,6 +17,11 @@ MODELS_TO_COMPARE = [
         "name": "EfficientNet Lite 300x300",
         "model_path": "models/efficientnet_lite_300x300/best_model_phase1.h5",
         "color": "green"
+    },
+    {
+        "name": "SqueezeNet 300x300",
+        "model_path": "models/squeezenet_300x300/best_model_phase2.h5",
+        "color": "red"
     }
 ]
 TEST_DATA_DIR = "processed_test_300x300"
@@ -133,7 +138,8 @@ def plot_comparison_charts(results, class_names, output_dir):
     models = list(results.keys())
     accuracies = [results[model]["accuracy"] for model in models]
     
-    plt.bar(models, accuracies, color=['blue', 'green'])
+    colors = [model_info["color"] for model_info in MODELS_TO_COMPARE if model_info["name"] in models]
+    plt.bar(models, accuracies, color=colors)
     plt.ylabel('Accuracy')
     plt.title('Model Accuracy Comparison')
     plt.ylim(0.5, 1.0)  # Set a reasonable y-axis limit
