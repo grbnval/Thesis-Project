@@ -1,0 +1,16 @@
+Model: Standard TFLite
+Accuracy: 0.9081
+Average inference time: 8.33 ms per image
+Model size: 3.15 MB
+
+Classification Report:
+                   precision    recall  f1-score   support
+
+early_blight_leaf       0.97      0.76      0.85       319
+     healthy_leaf       0.86      1.00      0.93       255
+ late_blight_leaf       0.94      0.92      0.93       306
+    septoria_leaf       0.87      0.98      0.92       284
+
+         accuracy                           0.91      1164
+        macro avg       0.91      0.91      0.91      1164
+     weighted avg       0.91      0.91      0.91      1164
