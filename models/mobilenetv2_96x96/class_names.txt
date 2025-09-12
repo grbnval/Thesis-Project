@@ -1,4 +1,0 @@
-early_blight_leaf
-healthy_leaf
-late_blight_leaf
-septoria_leaf
