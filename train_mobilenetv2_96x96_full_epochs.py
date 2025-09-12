@@ -14,7 +14,7 @@ from tqdm import tqdm
 # Constants
 IMAGE_SIZE = 96
 BATCH_SIZE = 32
-EPOCHS = 50
+EPOCHS = 100  # Increased from 50 to 100
 LEARNING_RATE = 0.001
 PROCESSED_DATA_DIR = "processed_dataset_96x96"
 TEST_SPLIT = 0.2  # Percentage of data to use for testing
@@ -125,7 +125,7 @@ def train_model_in_phases(model, base_model, train_generator, val_generator, cal
     print("\n=== Phase 1: Training top layers only ===")
     history1 = model.fit(
         train_generator,
-        epochs=10,  # Fewer epochs for initial training
+        epochs=20,  # Increased to 20 epochs for initial training
         validation_data=val_generator,
         callbacks=callbacks
     )
@@ -149,7 +149,7 @@ def train_model_in_phases(model, base_model, train_generator, val_generator, cal
     history2 = model.fit(
         train_generator,
         epochs=EPOCHS,
-        initial_epoch=10,  # Start from where we left off
+        initial_epoch=20,  # Start from where we left off (after 20 epochs)
         validation_data=val_generator,
         callbacks=callbacks
     )
@@ -217,12 +217,12 @@ if __name__ == "__main__":
     start_time = time.time()
     
     try:
-        print("=== TRAINING MOBILENETV2 96x96 MODEL (FULL EPOCHS) ===")
+        print("=== TRAINING MOBILENETV2 96x96 MODEL (FULL 100 EPOCHS) ===")
         
         # Set up paths
         PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
         PROCESSED_DIR = os.path.join(PROJECT_ROOT, PROCESSED_DATA_DIR)
-        MODEL_DIR = os.path.join(PROJECT_ROOT, "models", "mobilenetv2_96x96_full_epochs")
+        MODEL_DIR = os.path.join(PROJECT_ROOT, "models", "mobilenetv2_96x96_full_epochs_100")
         
         # Create model directory
         os.makedirs(MODEL_DIR, exist_ok=True)
@@ -367,7 +367,7 @@ if __name__ == "__main__":
             "version": "1.0",
             "model_type": "MobileNetV2",
             "resolution": "96x96",
-            "training_type": "full_epochs",
+            "training_type": "full_100_epochs",
             "date_trained": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
         
