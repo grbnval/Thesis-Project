@@ -1,0 +1,17 @@
+{
+  "classes": [
+    "early_blight_leaf",
+    "healthy_leaf",
+    "late_blight_leaf",
+    "septoria_leaf"
+  ],
+  "input_shape": [
+    96,
+    96,
+    3
+  ],
+  "version": "1.0",
+  "model_type": "MobileNetV2",
+  "architecture": "MobileNetV2 96x96",
+  "date_trained": "2025-09-12 11:29:03"
+}
