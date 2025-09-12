@@ -1,15 +1,15 @@
 Model: MobileNetV2 96x96 (Full Epochs)
-Test accuracy: 0.9149
-Test loss: 0.2810
+Test accuracy: 0.9328
+Test loss: 0.2078
 
 Classification Report:
                    precision    recall  f1-score   support
 
-early_blight_leaf       0.97      0.77      0.86       319
-     healthy_leaf       0.88      1.00      0.94       255
- late_blight_leaf       0.94      0.93      0.94       306
-    septoria_leaf       0.87      0.98      0.92       284
+early_blight_leaf       0.98      0.79      0.88       800
+     healthy_leaf       0.91      1.00      0.95       800
+ late_blight_leaf       0.94      0.96      0.95       800
+    septoria_leaf       0.91      0.98      0.95       800
 
-         accuracy                           0.91      1164
-        macro avg       0.92      0.92      0.91      1164
-     weighted avg       0.92      0.91      0.91      1164
+         accuracy                           0.93      3200
+        macro avg       0.94      0.93      0.93      3200
+     weighted avg       0.94      0.93      0.93      3200
