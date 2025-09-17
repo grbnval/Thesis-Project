@@ -1,0 +1,14 @@
+Deployment ID
+
+AKfycbzjKTTkpC1cIUO06UJsJONDAgur0cJL9vPT89A2TRpPKv0lmVv4E3zoixTDchE_Od2ZIQ
+
+Web App
+
+https://script.google.com/macros/s/AKfycbzjKTTkpC1cIUO06UJsJONDAgur0cJL9vPT89A2TRpPKv0lmVv4E3zoixTDchE_Od2ZIQ/exec
+
+Library
+
+https://script.google.com/macros/library/d/1SZEO3UiWmoM_ZSpcOtXmFBf2j3GabR7K6XWauPZVXa5GKogLcQUNZ9h_/1
+
+const char *ssid = "SACLOLO WIFI";
+const char *password = "112711210717";

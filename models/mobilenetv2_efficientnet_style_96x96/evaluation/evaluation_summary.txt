@@ -1,0 +1,56 @@
+=== MODEL EVALUATION SUMMARY ===
+
+OVERALL MODEL SCORE: 92.66%
+=======================
+
+MODEL INFORMATION:
+Model Type: MobileNetV2 (EfficientNet-style)
+Resolution: 96x96
+Training Type: full_100_epochs
+Date Trained: 2025-09-12 22:29:14
+Date Evaluated: 2025-09-12 22:39:01
+
+OVERALL METRICS:
+Accuracy: 0.9266
+Precision (Weighted): 0.9266
+Recall (Weighted): 0.9266
+F1 Score (Weighted): 0.9258
+
+DETAILED OVERALL METRICS:
+Macro Average (arithmetic mean, each class has equal weight):
+  Precision: 0.9266
+  Recall: 0.9266
+  F1 Score: 0.9258
+  Support: 3200.0
+
+Weighted Average (accounts for class imbalance):
+  Precision: 0.9266
+  Recall: 0.9266
+  F1 Score: 0.9258
+  Support: 3200.0
+
+CLASS-SPECIFIC METRICS:
+Class: early_blight_leaf
+  Precision: 0.9237
+  Recall: 0.8325
+  F1 Score: 0.8757
+  Support: 800.0
+
+Class: healthy_leaf
+  Precision: 0.9574
+  Recall: 0.9825
+  F1 Score: 0.9698
+  Support: 800.0
+
+Class: late_blight_leaf
+  Precision: 0.9207
+  Recall: 0.9437
+  F1 Score: 0.9321
+  Support: 800.0
+
+Class: septoria_leaf
+  Precision: 0.9045
+  Recall: 0.9475
+  F1 Score: 0.9255
+  Support: 800.0
+

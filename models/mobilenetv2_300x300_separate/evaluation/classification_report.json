@@ -1,0 +1,39 @@
+{
+    "early_blight_leaf": {
+        "precision": 0.8571428571428571,
+        "recall": 0.864,
+        "f1-score": 0.8605577689243028,
+        "support": 500.0
+    },
+    "healthy_leaf": {
+        "precision": 0.9938900203665988,
+        "recall": 0.976,
+        "f1-score": 0.9848637739656912,
+        "support": 500.0
+    },
+    "late_blight_leaf": {
+        "precision": 0.9836065573770492,
+        "recall": 0.84,
+        "f1-score": 0.9061488673139159,
+        "support": 500.0
+    },
+    "septoria_leaf": {
+        "precision": 0.8477508650519031,
+        "recall": 0.98,
+        "f1-score": 0.9090909090909091,
+        "support": 500.0
+    },
+    "accuracy": 0.915,
+    "macro avg": {
+        "precision": 0.9205975749846019,
+        "recall": 0.9149999999999999,
+        "f1-score": 0.9151653298237048,
+        "support": 2000.0
+    },
+    "weighted avg": {
+        "precision": 0.920597574984602,
+        "recall": 0.915,
+        "f1-score": 0.9151653298237047,
+        "support": 2000.0
+    }
+}

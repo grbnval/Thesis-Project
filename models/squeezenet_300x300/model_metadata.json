@@ -1,0 +1,16 @@
+{
+  "classes": [
+    "early_blight_leaf",
+    "healthy_leaf",
+    "late_blight_leaf",
+    "septoria_leaf"
+  ],
+  "input_shape": [
+    300,
+    300,
+    3
+  ],
+  "version": "1.0",
+  "model_type": "SqueezeNet-inspired (MobileNetV2 base with SqueezeNet-like top layers)",
+  "date_trained": "2025-09-10 10:55:57"
+}

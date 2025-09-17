@@ -1,0 +1,20 @@
+{
+  "model_name": "MobileNetV2",
+  "image_size": 224,
+  "num_classes": 4,
+  "classes": [
+    "early_blight_leaf",
+    "healthy_leaf",
+    "late_blight_leaf",
+    "septoria_leaf"
+  ],
+  "model_size_mb": 9.827484130859375,
+  "training_params": {
+    "batch_size": 32,
+    "epochs": 50,
+    "learning_rate": 0.001,
+    "early_stopping_epoch": 17
+  },
+  "accuracy": 0.33500000834465027,
+  "timestamp": "2025-09-09 11:33:15"
+}

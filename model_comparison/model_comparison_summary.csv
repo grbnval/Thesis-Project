@@ -1,0 +1,3 @@
+Model,Accuracy,Loss,F1-early_blight_leaf,F1-healthy_leaf,F1-late_blight_leaf,F1-septoria_leaf
+MobileNetV2 300x300,0.9150,0.3145,0.8606,0.9849,0.9061,0.9091
+EfficientNet Lite 300x300,0.8885,0.3282,0.8063,0.9792,0.8764,0.8866

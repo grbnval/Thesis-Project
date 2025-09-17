@@ -1,0 +1,10 @@
+                   precision    recall  f1-score   support
+
+early_blight_leaf     0.8511    0.7660    0.8063       500
+     healthy_leaf     0.9687    0.9900    0.9792       500
+ late_blight_leaf     0.9114    0.8440    0.8764       500
+    septoria_leaf     0.8281    0.9540    0.8866       500
+
+         accuracy                         0.8885      2000
+        macro avg     0.8898    0.8885    0.8871      2000
+     weighted avg     0.8898    0.8885    0.8871      2000
