@@ -1,0 +1,29 @@
+Model: SqueezeNet 96x96 (Full Epochs)
+Date evaluated: 2025-10-01 04:53:08
+
+Test accuracy: 0.7075
+
+Classification Report:
+                   precision    recall  f1-score   support
+
+early_blight_leaf       0.67      0.60      0.63       100
+     healthy_leaf       1.00      0.58      0.73       100
+ late_blight_leaf       0.80      0.70      0.75       100
+    septoria_leaf       0.57      0.95      0.71       100
+
+         accuracy                           0.71       400
+        macro avg       0.76      0.71      0.71       400
+     weighted avg       0.76      0.71      0.71       400
+
+
+Confusion Matrix (rows: true, cols: pred):
+[[60  0  5 35]
+ [19 58  9 14]
+ [ 8  0 70 22]
+ [ 2  0  3 95]]
+
+Class-wise Accuracy:
+early_blight_leaf: 0.6000
+healthy_leaf: 0.5800
+late_blight_leaf: 0.7000
+septoria_leaf: 0.9500

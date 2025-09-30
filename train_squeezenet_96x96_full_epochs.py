@@ -90,8 +90,16 @@ def create_data_generators(X_train, y_train, X_val, y_val):
     return train_generator, val_generator
 
 def train_model_full_epochs(model, base_model, train_generator, val_generator, callbacks):
-    print(f"\n=== Training SqueezeNet 96x96 for {EPOCHS} epochs ===")
-    # Unfreeze last 30 layers for fine-tuning (like other 96x96 scripts)
+    # Two-phase training: Phase 1 (top layers), Phase 2 (fine-tuning)
+    print("\n=== Phase 1: Training top layers only ===")
+    history1 = model.fit(
+        train_generator,
+        epochs=20,
+        validation_data=val_generator,
+        callbacks=callbacks
+    )
+
+    print("\n=== Phase 2: Fine-tuning last layers ===")
     for layer in base_model.layers[-30:]:
         layer.trainable = True
     model.compile(
@@ -99,13 +107,18 @@ def train_model_full_epochs(model, base_model, train_generator, val_generator, c
         loss='categorical_crossentropy',
         metrics=['accuracy']
     )
-    history = model.fit(
+    history2 = model.fit(
         train_generator,
         epochs=EPOCHS,
+        initial_epoch=20,
         validation_data=val_generator,
         callbacks=callbacks
     )
-    return history.history
+    # Combine histories
+    combined_history = {}
+    for key in history1.history:
+        combined_history[key] = history1.history[key] + history2.history[key]
+    return combined_history
 
 def plot_training_history(history, output_dir):
     plt.figure(figsize=(12, 4))

@@ -44,9 +44,13 @@ y_test = np.array(y_test)
 y_pred_probs = model.predict(X_test, batch_size=BATCH_SIZE)
 y_pred = np.argmax(y_pred_probs, axis=1)
 
+from datetime import datetime
+
 # Classification report
+report = classification_report(y_test, y_pred, target_names=class_names)
+overall_acc = np.mean(y_pred == y_test)
 print("\nClassification Report:")
-print(classification_report(y_test, y_pred, target_names=class_names))
+print(report)
 
 # Confusion matrix
 cm = confusion_matrix(y_test, y_pred)
@@ -57,6 +61,7 @@ plt.title("Confusion Matrix - SqueezeNet 96x96")
 plt.tight_layout()
 plt.savefig(os.path.join(MODEL_DIR, "confusion_matrix_squeezenet_96x96.png"))
 plt.show()
+
 
 # Per-class accuracy
 class_accuracy = cm.diagonal() / cm.sum(axis=1)
@@ -70,6 +75,22 @@ plt.tight_layout()
 plt.savefig(os.path.join(MODEL_DIR, "class_accuracy_squeezenet_96x96.png"))
 plt.show()
 
-# Overall accuracy
-overall_acc = np.mean(y_pred == y_test)
+# Save detailed evaluation report (after cm and class_accuracy are defined)
+from datetime import datetime
+os.makedirs(os.path.join(MODEL_DIR, "evaluation"), exist_ok=True)
+report_path = os.path.join(MODEL_DIR, "evaluation", "classification_report.txt")
+with open(report_path, 'w') as f:
+    f.write("Model: SqueezeNet 96x96 (Full Epochs)\n")
+    f.write(f"Date evaluated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+    f.write(f"Test accuracy: {overall_acc:.4f}\n\n")
+    f.write("Classification Report:\n")
+    f.write(report + "\n\n")
+    f.write("Confusion Matrix (rows: true, cols: pred):\n")
+    f.write(str(cm) + "\n")
+    f.write("\nClass-wise Accuracy:\n")
+    for name, acc in zip(class_names, class_accuracy):
+        f.write(f"{name}: {acc:.4f}\n")
+print(f"Detailed evaluation report saved to: {report_path}")
+
+# Overall accuracy (already computed above)
 print(f"\nOverall Test Accuracy: {overall_acc:.4f}")
