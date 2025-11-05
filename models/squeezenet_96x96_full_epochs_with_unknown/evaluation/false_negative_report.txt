@@ -1,0 +1,41 @@
+FALSE NEGATIVE ANALYSIS REPORT
+==================================================
+
+EARLY_BLIGHT_LEAF:
+  Total samples: 596
+  False negatives: 38
+  False negative rate: 0.0638 (6.38%)
+  Misclassified as:
+    - septoria_leaf: 26 samples (68.4%)
+    - late_blight_leaf: 9 samples (23.7%)
+    - healthy_leaf: 3 samples (7.9%)
+
+HEALTHY_LEAF:
+  Total samples: 600
+  False negatives: 1
+  False negative rate: 0.0017 (0.17%)
+  Misclassified as:
+    - septoria_leaf: 1 samples (100.0%)
+
+LATE_BLIGHT_LEAF:
+  Total samples: 599
+  False negatives: 20
+  False negative rate: 0.0334 (3.34%)
+  Misclassified as:
+    - septoria_leaf: 15 samples (75.0%)
+    - early_blight_leaf: 4 samples (20.0%)
+    - healthy_leaf: 1 samples (5.0%)
+
+SEPTORIA_LEAF:
+  Total samples: 584
+  False negatives: 2
+  False negative rate: 0.0034 (0.34%)
+  Misclassified as:
+    - healthy_leaf: 1 samples (50.0%)
+    - late_blight_leaf: 1 samples (50.0%)
+
+UNKNOWN:
+  Total samples: 573
+  False negatives: 0
+  False negative rate: 0.0000 (0.00%)
+

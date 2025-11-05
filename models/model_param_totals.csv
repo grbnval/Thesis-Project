@@ -1,0 +1,4 @@
+model,total_params,trainable,non_trainable,layer_params_csv
+SqueezeNet-inspired,2721093,1988997,732096,C:\Users\Azief\Documents\GitHub\Thesis-Project\models\SqueezeNet-inspired_layer_params.csv
+MobileNetV2-baseline,3046469,2314885,731584,C:\Users\Azief\Documents\GitHub\Thesis-Project\models\MobileNetV2-baseline_layer_params.csv
+MobileNetV2-Eff-style,3046469,2314885,731584,C:\Users\Azief\Documents\GitHub\Thesis-Project\models\MobileNetV2-Eff-style_layer_params.csv

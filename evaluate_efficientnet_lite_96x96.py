@@ -10,10 +10,16 @@ MODEL_DIR = "models/efficientnet_lite_96x96_full_epochs"
 BATCH_SIZE = 32
 TEST_DATASET_DIR = "test_dataset"
 
-# Load class names from model_metadata.json
-with open(os.path.join(MODEL_DIR, "model_metadata.json"), "r") as f:
-    class_info = json.load(f)
-class_names = class_info["classes"]
+# Load class names from class_info.json
+try:
+    with open(os.path.join(MODEL_DIR, "class_info.json"), "r") as f:
+        class_info = json.load(f)
+    class_names = class_info["classes"]
+except FileNotFoundError:
+    # Fallback to model_metadata.json if class_info.json doesn't exist
+    with open(os.path.join(MODEL_DIR, "model_metadata.json"), "r") as f:
+        class_info = json.load(f)
+    class_names = class_info["classes"]
 
 # Load model
 model = tf.keras.models.load_model(os.path.join(MODEL_DIR, "best_model.h5"))

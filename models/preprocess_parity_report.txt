@@ -1,0 +1,128 @@
+Preprocess parity test report
+Pairs tested: 25
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\early_blight_leaf\Eb736_rotL.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\early_blight_leaf\Eb736_rotL.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\early_blight_leaf\Copy of Copy of Copy of 20251005-005801(2).jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\early_blight_leaf\Copy of Copy of Copy of 20251005-005801(2).npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\early_blight_leaf\Eb700_mirror.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\early_blight_leaf\Eb700_mirror.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\early_blight_leaf\Eb626_upside.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\early_blight_leaf\Eb626_upside.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\early_blight_leaf\Eb688_mirror.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\early_blight_leaf\Eb688_mirror.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\healthy_leaf\H880_rotR.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\healthy_leaf\H880_rotR.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\healthy_leaf\H832_rotR.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\healthy_leaf\H832_rotR.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\healthy_leaf\H862_mirror.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\healthy_leaf\H862_mirror.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\healthy_leaf\H849_rotL.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\healthy_leaf\H849_rotL.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\healthy_leaf\H841_rotL.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\healthy_leaf\H841_rotL.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\late_blight_leaf\Lb952_rotR.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\late_blight_leaf\Lb952_rotR.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\late_blight_leaf\Lb910_upside.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\late_blight_leaf\Lb910_upside.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\late_blight_leaf\Lb858_mirror.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\late_blight_leaf\Lb858_mirror.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\late_blight_leaf\Lb857.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\late_blight_leaf\Lb857.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\late_blight_leaf\Lb806_rotL.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\late_blight_leaf\Lb806_rotL.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\septoria_leaf\Slf744_rotL.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\septoria_leaf\Slf744_rotL.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\septoria_leaf\Slf837.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\septoria_leaf\Slf837.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\septoria_leaf\Slf883_rotL.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\septoria_leaf\Slf883_rotL.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\septoria_leaf\Slf961_rotL.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\septoria_leaf\Slf961_rotL.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\septoria_leaf\Slf904_rotL.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\septoria_leaf\Slf904_rotL.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\unknown\image98.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\unknown\image98.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\unknown\20250915-235258.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\unknown\20250915-235258.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\unknown\image181.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\unknown\image181.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\unknown\image557.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\unknown\image557.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+
+RAW: c:\Users\Azief\Documents\GitHub\Thesis-Project\raw_dataset\unknown\image317.jpg
+NPY: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96\unknown\image317.npy
+Max abs diff: 0.000000
+Mean abs diff: 0.000000
+

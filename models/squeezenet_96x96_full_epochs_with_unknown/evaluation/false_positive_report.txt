@@ -1,0 +1,46 @@
+FALSE POSITIVE ANALYSIS REPORT
+==================================================
+
+EARLY_BLIGHT_LEAF:
+  Total predictions: 562
+  False positives: 4
+  False positive rate: 0.0071 (0.71%)
+  Precision: 0.9929 (99.29%)
+  Actually were:
+    - late_blight_leaf: 4 samples (100.0%)
+
+HEALTHY_LEAF:
+  Total predictions: 604
+  False positives: 5
+  False positive rate: 0.0083 (0.83%)
+  Precision: 0.9917 (99.17%)
+  Actually were:
+    - early_blight_leaf: 3 samples (60.0%)
+    - late_blight_leaf: 1 samples (20.0%)
+    - septoria_leaf: 1 samples (20.0%)
+
+LATE_BLIGHT_LEAF:
+  Total predictions: 589
+  False positives: 10
+  False positive rate: 0.0170 (1.70%)
+  Precision: 0.9830 (98.30%)
+  Actually were:
+    - early_blight_leaf: 9 samples (90.0%)
+    - septoria_leaf: 1 samples (10.0%)
+
+SEPTORIA_LEAF:
+  Total predictions: 624
+  False positives: 42
+  False positive rate: 0.0673 (6.73%)
+  Precision: 0.9327 (93.27%)
+  Actually were:
+    - early_blight_leaf: 26 samples (61.9%)
+    - late_blight_leaf: 15 samples (35.7%)
+    - healthy_leaf: 1 samples (2.4%)
+
+UNKNOWN:
+  Total predictions: 573
+  False positives: 0
+  False positive rate: 0.0000 (0.00%)
+  Precision: 1.0000 (100.00%)
+

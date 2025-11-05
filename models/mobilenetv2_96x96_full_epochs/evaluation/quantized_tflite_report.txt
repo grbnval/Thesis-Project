@@ -1,6 +1,6 @@
 Model: Quantized TFLite
 Accuracy: 0.8600
-Average inference time: 1.57 ms per image
+Average inference time: 1.61 ms per image
 Model size: 3.36 MB
 
 Classification Report:

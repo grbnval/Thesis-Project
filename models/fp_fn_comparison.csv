@@ -1,0 +1,16 @@
+model,class,fn,fn_rate,support,fp,fp_rate,total_predictions
+squeezenet_96x96_full_epochs_with_unknown,early_blight_leaf,,,,,,
+squeezenet_96x96_full_epochs_with_unknown,healthy_leaf,,,,,,
+squeezenet_96x96_full_epochs_with_unknown,late_blight_leaf,,,,,,
+squeezenet_96x96_full_epochs_with_unknown,septoria_leaf,,,,,,
+squeezenet_96x96_full_epochs_with_unknown,unknown,,,,,,
+mobilenetv2_96x96_full_epochs_with_unknown,early_blight_leaf,,,,,,
+mobilenetv2_96x96_full_epochs_with_unknown,healthy_leaf,,,,,,
+mobilenetv2_96x96_full_epochs_with_unknown,late_blight_leaf,,,,,,
+mobilenetv2_96x96_full_epochs_with_unknown,septoria_leaf,,,,,,
+mobilenetv2_96x96_full_epochs_with_unknown,unknown,,,,,,
+mobilenetv2_efficientnet_style_96x96,early_blight_leaf,,,,7.0,0.013232514177693762,529.0
+mobilenetv2_efficientnet_style_96x96,healthy_leaf,,,,16.0,0.026016260162601626,615.0
+mobilenetv2_efficientnet_style_96x96,late_blight_leaf,,,,16.0,0.026755852842809364,598.0
+mobilenetv2_efficientnet_style_96x96,septoria_leaf,,,,60.0,0.09419152276295134,637.0
+mobilenetv2_efficientnet_style_96x96,unknown,,,,0.0,0.0,573.0

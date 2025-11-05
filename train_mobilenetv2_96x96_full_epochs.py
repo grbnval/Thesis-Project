@@ -222,7 +222,7 @@ if __name__ == "__main__":
         # Set up paths
         PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
         PROCESSED_DIR = os.path.join(PROJECT_ROOT, PROCESSED_DATA_DIR)
-        MODEL_DIR = os.path.join(PROJECT_ROOT, "models", "mobilenetv2_96x96_full_epochs_100")
+        MODEL_DIR = os.path.join(PROJECT_ROOT, "models", "mobilenetv2_96x96_full_epochs_with_unknown")
         
         # Create model directory
         os.makedirs(MODEL_DIR, exist_ok=True)

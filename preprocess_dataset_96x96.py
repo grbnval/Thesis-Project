@@ -16,6 +16,7 @@ def check_dataset(input_dir):
         print("├── early_blight_leaf/")
         print("├── late_blight_leaf/")
         print("└── septoria_leaf/")
+        print("└── unknown/")
         return False
         
     image_count = 0
@@ -37,6 +38,7 @@ def check_dataset(input_dir):
         print("2. Put early blight images in 'early_blight_leaf/'")
         print("3. Put late blight images in 'late_blight_leaf/'")
         print("4. Put septoria leaf images in 'septoria_leaf/'")
+        print("5. Put unknown images in 'unknown/'")
         return False
         
     print(f"\nTotal images found: {image_count}")

@@ -1,0 +1,8 @@
+layer_name,param_count,layer_type
+mobilenetv2_1.00_96,2257984,Functional
+global_average_pooling2d,0,GlobalAveragePooling2D
+dense,327936,Dense
+batch_normalization,1024,BatchNormalization
+dense_1,131584,Dense
+dropout,0,Dropout
+dense_2,2565,Dense

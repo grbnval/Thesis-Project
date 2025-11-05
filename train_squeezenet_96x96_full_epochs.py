@@ -158,10 +158,10 @@ def convert_to_tflite(model, output_path):
 if __name__ == "__main__":
     start_time = time.time()
     try:
-        print("=== TRAINING SQUEEZENET 96x96 MODEL (FULL 100 EPOCHS) ===")
+        print("=== TRAINING SQUEEZENET 96x96 MODEL (FULL 100 EPOCHS WITH UNKNOWN) ===")
         PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
         PROCESSED_DIR = os.path.join(PROJECT_ROOT, PROCESSED_DATA_DIR)
-        MODEL_DIR = os.path.join(PROJECT_ROOT, "models", "squeezenet_96x96_full_epochs_100")
+        MODEL_DIR = os.path.join(PROJECT_ROOT, "models", "squeezenet_96x96_full_epochs_with_unknown")
         os.makedirs(MODEL_DIR, exist_ok=True)
         print(f"Looking for processed data in: {PROCESSED_DIR}")
         if not os.path.exists(PROCESSED_DIR):
@@ -254,7 +254,7 @@ if __name__ == "__main__":
             "version": "1.0",
             "model_type": "SqueezeNet-inspired (MobileNetV2 base with SqueezeNet-like top layers)",
             "resolution": "96x96",
-            "training_type": "full_100_epochs",
+            "training_type": "full_100_epochs_with_unknown",
             "date_trained": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
         class_info_path = os.path.join(MODEL_DIR, "class_info.json")

@@ -1,0 +1,56 @@
+Model: MobileNetV2 96x96 (Full Epochs with Unknown)
+Test accuracy: 0.9583
+Test loss: 0.1066
+
+Classification Report:
+Model: MobileNetV2 96x96 (Full Epochs with Unknown)
+Test accuracy: 0.9583
+Test loss: 0.1066
+
+Classification Report:
+                   precision    recall  f1-score   support
+
+early_blight_leaf       0.98      0.86      0.92       596
+     healthy_leaf       0.98      1.00      0.99       600
+ late_blight_leaf       0.96      0.96      0.96       599
+    septoria_leaf       0.88      0.98      0.92       584
+          unknown       1.00      1.00      1.00       573
+
+         accuracy                           0.96      2952
+        macro avg       0.96      0.96      0.96      2952
+     weighted avg       0.96      0.96      0.96      2952
+
+
+==================================================
+FALSE NEGATIVE SUMMARY:
+early_blight_leaf: 83/596 (13.9% FN rate)
+healthy_leaf: 1/600 (0.2% FN rate)
+late_blight_leaf: 24/599 (4.0% FN rate)
+septoria_leaf: 14/584 (2.4% FN rate)
+unknown: 1/573 (0.2% FN rate)
+
+==================================================
+FALSE POSITIVE SUMMARY:
+early_blight_leaf: 8/521 (1.5% FP rate, 98.5% precision)
+healthy_leaf: 13/612 (2.1% FP rate, 97.9% precision)
+late_blight_leaf: 23/598 (3.8% FP rate, 96.2% precision)
+septoria_leaf: 79/649 (12.2% FP rate, 87.8% precision)
+unknown: 0/572 (0.0% FP rate, 100.0% precision)
+   
+
+
+==================================================
+FALSE NEGATIVE SUMMARY:
+early_blight_leaf: 83/596 (13.9% FN rate)
+healthy_leaf: 1/600 (0.2% FN rate)
+late_blight_leaf: 24/599 (4.0% FN rate)
+septoria_leaf: 14/584 (2.4% FN rate)
+unknown: 1/573 (0.2% FN rate)
+
+==================================================
+FALSE POSITIVE SUMMARY:
+early_blight_leaf: 8/521 (1.5% FP rate, 98.5% precision)
+healthy_leaf: 13/612 (2.1% FP rate, 97.9% precision)
+late_blight_leaf: 23/598 (3.8% FP rate, 96.2% precision)
+septoria_leaf: 79/649 (12.2% FP rate, 87.8% precision)
+unknown: 0/572 (0.0% FP rate, 100.0% precision)

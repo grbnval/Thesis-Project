@@ -1,0 +1,19 @@
+{
+  "classes": [
+    "early_blight_leaf",
+    "healthy_leaf",
+    "late_blight_leaf",
+    "septoria_leaf",
+    "unknown"
+  ],
+  "input_shape": [
+    96,
+    96,
+    3
+  ],
+  "version": "1.0",
+  "model_type": "SqueezeNet-inspired (MobileNetV2 base with SqueezeNet-like top layers)",
+  "resolution": "96x96",
+  "training_type": "full_100_epochs_with_unknown",
+  "date_trained": "2025-10-17 11:19:37"
+}

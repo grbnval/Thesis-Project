@@ -1,0 +1,16 @@
+CLASS CONFUSION ANALYSIS
+==================================================
+
+Most common misclassifications (True Class -> Predicted Class):
+
+ 1. early_blight_leaf -> septoria_leaf: 59 samples (9.9%)
+ 2. late_blight_leaf -> septoria_leaf: 19 samples (3.2%)
+ 3. early_blight_leaf -> late_blight_leaf: 17 samples (2.9%)
+ 4. early_blight_leaf -> healthy_leaf: 7 samples (1.2%)
+ 5. septoria_leaf -> late_blight_leaf: 6 samples (1.0%)
+ 6. septoria_leaf -> early_blight_leaf: 4 samples (0.7%)
+ 7. septoria_leaf -> healthy_leaf: 4 samples (0.7%)
+ 8. late_blight_leaf -> early_blight_leaf: 4 samples (0.7%)
+ 9. unknown -> healthy_leaf: 1 samples (0.2%)
+10. late_blight_leaf -> healthy_leaf: 1 samples (0.2%)
+11. healthy_leaf -> septoria_leaf: 1 samples (0.2%)

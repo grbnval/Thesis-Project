@@ -1,0 +1,33 @@
+Model: SqueezeNet 96x96 (Full Epochs with Unknown)
+Test accuracy: 0.9793
+Test loss: 0.0567
+
+Classification Report:
+                   precision    recall  f1-score   support
+
+early_blight_leaf       0.99      0.94      0.96       596
+     healthy_leaf       0.99      1.00      1.00       600
+ late_blight_leaf       0.98      0.97      0.97       599
+    septoria_leaf       0.93      1.00      0.96       584
+          unknown       1.00      1.00      1.00       573
+
+         accuracy                           0.98      2952
+        macro avg       0.98      0.98      0.98      2952
+     weighted avg       0.98      0.98      0.98      2952
+
+
+==================================================
+FALSE NEGATIVE SUMMARY:
+early_blight_leaf: 38/596 (6.4% FN rate)
+healthy_leaf: 1/600 (0.2% FN rate)
+late_blight_leaf: 20/599 (3.3% FN rate)
+septoria_leaf: 2/584 (0.3% FN rate)
+unknown: 0/573 (0.0% FN rate)
+
+==================================================
+FALSE POSITIVE SUMMARY:
+early_blight_leaf: 4/562 (0.7% FP rate, 99.3% precision)
+healthy_leaf: 5/604 (0.8% FP rate, 99.2% precision)
+late_blight_leaf: 10/589 (1.7% FP rate, 98.3% precision)
+septoria_leaf: 42/624 (6.7% FP rate, 93.3% precision)
+unknown: 0/573 (0.0% FP rate, 100.0% precision)

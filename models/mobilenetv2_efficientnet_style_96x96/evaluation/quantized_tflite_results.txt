@@ -1,0 +1,19 @@
+Quantized TFLite EVALUATION RESULTS
+========================================
+
+Accuracy: 0.9041
+Average Inference Time: 2.01 ms
+Model Size: 3.36 MB
+
+Classification Report:
+                   precision    recall  f1-score   support
+
+early_blight_leaf       0.96      0.74      0.84       596
+     healthy_leaf       0.94      0.91      0.93       600
+ late_blight_leaf       0.80      0.93      0.86       599
+    septoria_leaf       0.87      0.93      0.90       584
+          unknown       0.98      1.00      0.99       573
+
+         accuracy                           0.90      2952
+        macro avg       0.91      0.90      0.90      2952
+     weighted avg       0.91      0.90      0.90      2952

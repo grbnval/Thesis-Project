@@ -9,10 +9,14 @@ from sklearn.metrics import confusion_matrix, classification_report
 import seaborn as sns
 from tqdm import tqdm
 
+# NOTE: This script uses preprocessed test data from 'processed_test_96x96'
+# The preprocessing includes CLAHE enhancement (clipLimit=3.0, tileGridSize=(8,8))
+# which matches the training preprocessing pipeline used in preprocess_dataset_96x96.py
+
 # Constants
 IMAGE_SIZE = 96
-MODEL_DIR = "models/mobilenetv2_96x96_full_epochs"
-TEST_DATA_DIR = "test_dataset"
+MODEL_DIR = "models/mobilenetv2_96x96_full_epochs_with_unknown"
+TEST_DATA_DIR = "processed_test_96x96"
 BATCH_SIZE = 32
 
 def load_model(model_path):
@@ -83,7 +87,7 @@ def preprocess_image(image_path, target_size=(IMAGE_SIZE, IMAGE_SIZE)):
     return normalized_img
 
 def load_and_preprocess_test_data(test_dir, class_names):
-    """Load and preprocess test data from raw test dataset"""
+    """Load preprocessed test data from .npy files (already CLAHE processed)"""
     if not os.path.exists(test_dir):
         raise FileNotFoundError(f"Test directory not found: {test_dir}")
     
@@ -95,41 +99,42 @@ def load_and_preprocess_test_data(test_dir, class_names):
     
     images = []
     labels = []
-    image_paths = []  # Store paths for visualization
+    image_paths = []  # Store paths for reference
     
     for class_idx, class_name in enumerate(class_names):
         class_dir = os.path.join(test_dir, class_name)
         if not os.path.isdir(class_dir):
             continue
             
-        # Get all image files
+        # Get all .npy files (preprocessed images)
         files = [f for f in os.listdir(class_dir) 
-                if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
+                if f.lower().endswith('.npy')]
         
         if not files:
-            print(f"Warning: No image files found in {class_name}/")
+            print(f"Warning: No .npy files found in {class_name}/")
             continue
             
-        print(f"Loading {len(files)} test images from {class_name}/")
+        print(f"Loading {len(files)} preprocessed test images from {class_name}/")
         
-        # Process each image with progress bar
-        for img_file in tqdm(files, desc=f"Processing {class_name}"):
+        # Load each preprocessed image
+        for img_file in tqdm(files, desc=f"Loading {class_name}"):
             img_path = os.path.join(class_dir, img_file)
             
             try:
-                # Preprocess the image
-                img = preprocess_image(img_path, target_size=(IMAGE_SIZE, IMAGE_SIZE))
+                # Load the preprocessed numpy array (already CLAHE enhanced and normalized)
+                img = np.load(img_path)
                 
                 # Add to dataset
                 images.append(img)
                 labels.append(class_idx)
                 image_paths.append(img_path)
             except Exception as e:
-                print(f"Error processing {img_path}: {e}")
+                print(f"Error loading {img_path}: {e}")
     
     if not images:
         raise ValueError("No images found in any class folder!")
     
+    print(f"\nLoaded {len(images)} preprocessed images (already CLAHE enhanced)")
     return np.array(images), np.array(labels), image_paths
 
 def plot_confusion_matrix(true_labels, pred_labels, class_names, output_dir):
@@ -271,6 +276,225 @@ def calculate_class_accuracies(true_labels, pred_labels, class_names):
     
     return class_accuracies
 
+def generate_false_negative_report(true_labels, pred_labels, class_names, output_dir):
+    """Generate detailed false negative report for each class"""
+    print("\n=== FALSE NEGATIVE ANALYSIS ===")
+    
+    fn_report = []
+    
+    for class_idx, class_name in enumerate(class_names):
+        # Get indices where true label is this class
+        true_class_indices = np.where(true_labels == class_idx)[0]
+        
+        if len(true_class_indices) > 0:
+            # Get predictions for this true class
+            predictions_for_class = pred_labels[true_class_indices]
+            
+            # Find false negatives (true class but predicted as other classes)
+            false_negatives = np.where(predictions_for_class != class_idx)[0]
+            fn_indices = true_class_indices[false_negatives]
+            
+            total_samples = len(true_class_indices)
+            fn_count = len(fn_indices)
+            fn_rate = fn_count / total_samples if total_samples > 0 else 0
+            
+            print(f"\n{class_name.upper()}:")
+            print(f"  Total samples: {total_samples}")
+            print(f"  False negatives: {fn_count}")
+            print(f"  False negative rate: {fn_rate:.4f} ({fn_rate*100:.2f}%)")
+            
+            # Analyze what these false negatives were predicted as
+            if fn_count > 0:
+                fn_predictions = predictions_for_class[false_negatives]
+                print(f"  Misclassified as:")
+                
+                misclassified_counts = {}
+                for pred_class_idx in fn_predictions:
+                    pred_class_name = class_names[pred_class_idx]
+                    misclassified_counts[pred_class_name] = misclassified_counts.get(pred_class_name, 0) + 1
+                
+                for pred_class, count in sorted(misclassified_counts.items(), key=lambda x: x[1], reverse=True):
+                    percentage = (count / fn_count) * 100
+                    print(f"    - {pred_class}: {count} samples ({percentage:.1f}%)")
+            
+            fn_report.append({
+                'true_class': class_name,
+                'total_samples': total_samples,
+                'false_negatives': fn_count,
+                'fn_rate': fn_rate,
+                'misclassified_as': misclassified_counts if fn_count > 0 else {}
+            })
+    
+    # Save false negative report
+    os.makedirs(os.path.join(output_dir, "evaluation"), exist_ok=True)
+    with open(os.path.join(output_dir, "evaluation", "false_negative_report.txt"), 'w', encoding='utf-8') as f:
+        f.write("FALSE NEGATIVE ANALYSIS REPORT\n")
+        f.write("=" * 50 + "\n\n")
+        
+        for report in fn_report:
+            f.write(f"{report['true_class'].upper()}:\n")
+            f.write(f"  Total samples: {report['total_samples']}\n")
+            f.write(f"  False negatives: {report['false_negatives']}\n")
+            f.write(f"  False negative rate: {report['fn_rate']:.4f} ({report['fn_rate']*100:.2f}%)\n")
+            
+            if report['misclassified_as']:
+                f.write(f"  Misclassified as:\n")
+                for pred_class, count in sorted(report['misclassified_as'].items(), key=lambda x: x[1], reverse=True):
+                    percentage = (count / report['false_negatives']) * 100
+                    f.write(f"    - {pred_class}: {count} samples ({percentage:.1f}%)\n")
+            f.write("\n")
+    
+    return fn_report
+
+def generate_false_positive_report(true_labels, pred_labels, class_names, output_dir):
+    """Generate detailed false positive report for each class"""
+    print("\n=== FALSE POSITIVE ANALYSIS ===")
+    
+    fp_report = []
+    
+    for class_idx, class_name in enumerate(class_names):
+        # Get indices where prediction is this class
+        pred_class_indices = np.where(pred_labels == class_idx)[0]
+        
+        if len(pred_class_indices) > 0:
+            # Get true labels for these predictions
+            true_labels_for_pred = true_labels[pred_class_indices]
+            
+            # Find false positives (predicted as this class but true label is different)
+            false_positives = np.where(true_labels_for_pred != class_idx)[0]
+            fp_indices = pred_class_indices[false_positives]
+            
+            total_predictions = len(pred_class_indices)
+            fp_count = len(fp_indices)
+            fp_rate = fp_count / total_predictions if total_predictions > 0 else 0
+            
+            # Calculate precision (true positives / (true positives + false positives))
+            true_positives = total_predictions - fp_count
+            precision = true_positives / total_predictions if total_predictions > 0 else 0
+            
+            print(f"\n{class_name.upper()}:")
+            print(f"  Total predictions: {total_predictions}")
+            print(f"  False positives: {fp_count}")
+            print(f"  False positive rate: {fp_rate:.4f} ({fp_rate*100:.2f}%)")
+            print(f"  Precision: {precision:.4f} ({precision*100:.2f}%)")
+            
+            # Analyze what these false positives actually were
+            if fp_count > 0:
+                fp_true_labels = true_labels_for_pred[false_positives]
+                print(f"  Actually were:")
+                
+                actual_counts = {}
+                for true_class_idx in fp_true_labels:
+                    true_class_name = class_names[true_class_idx]
+                    actual_counts[true_class_name] = actual_counts.get(true_class_name, 0) + 1
+                
+                for true_class, count in sorted(actual_counts.items(), key=lambda x: x[1], reverse=True):
+                    percentage = (count / fp_count) * 100
+                    print(f"    - {true_class}: {count} samples ({percentage:.1f}%)")
+            
+            fp_report.append({
+                'predicted_class': class_name,
+                'total_predictions': total_predictions,
+                'false_positives': fp_count,
+                'fp_rate': fp_rate,
+                'precision': precision,
+                'actually_were': actual_counts if fp_count > 0 else {}
+            })
+    
+    # Save false positive report
+    os.makedirs(os.path.join(output_dir, "evaluation"), exist_ok=True)
+    with open(os.path.join(output_dir, "evaluation", "false_positive_report.txt"), 'w', encoding='utf-8') as f:
+        f.write("FALSE POSITIVE ANALYSIS REPORT\n")
+        f.write("=" * 50 + "\n\n")
+        
+        for report in fp_report:
+            f.write(f"{report['predicted_class'].upper()}:\n")
+            f.write(f"  Total predictions: {report['total_predictions']}\n")
+            f.write(f"  False positives: {report['false_positives']}\n")
+            f.write(f"  False positive rate: {report['fp_rate']:.4f} ({report['fp_rate']*100:.2f}%)\n")
+            f.write(f"  Precision: {report['precision']:.4f} ({report['precision']*100:.2f}%)\n")
+            
+            if report['actually_were']:
+                f.write(f"  Actually were:\n")
+                for true_class, count in sorted(report['actually_were'].items(), key=lambda x: x[1], reverse=True):
+                    percentage = (count / report['false_positives']) * 100
+                    f.write(f"    - {true_class}: {count} samples ({percentage:.1f}%)\n")
+            f.write("\n")
+    
+    return fp_report
+
+def plot_false_negative_positive_rates(fn_report, fp_report, output_dir):
+    """Plot false negative and false positive rates for each class"""
+    class_names = [report['true_class'] for report in fn_report]
+    fn_rates = [report['fn_rate'] for report in fn_report]
+    fp_rates = [report['fp_rate'] for report in fp_report]
+    
+    x = np.arange(len(class_names))
+    width = 0.35
+    
+    plt.figure(figsize=(12, 6))
+    plt.bar(x - width/2, fn_rates, width, label='False Negative Rate', color='red', alpha=0.7)
+    plt.bar(x + width/2, fp_rates, width, label='False Positive Rate', color='blue', alpha=0.7)
+    
+    plt.xlabel('Classes')
+    plt.ylabel('Rate')
+    plt.title('False Negative and False Positive Rates by Class')
+    plt.xticks(x, class_names, rotation=45, ha='right')
+    plt.legend()
+    plt.ylim(0, 1.0)
+    
+    # Add value labels on bars
+    for i, (fn_rate, fp_rate) in enumerate(zip(fn_rates, fp_rates)):
+        plt.text(i - width/2, fn_rate + 0.01, f'{fn_rate:.3f}', ha='center', va='bottom', fontsize=9)
+        plt.text(i + width/2, fp_rate + 0.01, f'{fp_rate:.3f}', ha='center', va='bottom', fontsize=9)
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, "evaluation", "false_negative_positive_rates.png"), dpi=300, bbox_inches='tight')
+    plt.close()
+
+def generate_class_confusion_analysis(true_labels, pred_labels, class_names, output_dir):
+    """Generate detailed confusion analysis between specific class pairs"""
+    print("\n=== CLASS CONFUSION ANALYSIS ===")
+    
+    # Create confusion matrix
+    cm = confusion_matrix(true_labels, pred_labels)
+    
+    confusion_pairs = []
+    
+    for i, true_class in enumerate(class_names):
+        for j, pred_class in enumerate(class_names):
+            if i != j and cm[i][j] > 0:  # Only consider off-diagonal elements (misclassifications)
+                confusion_count = cm[i][j]
+                total_true_class = np.sum(cm[i, :])  # Total samples of true class i
+                confusion_rate = confusion_count / total_true_class
+                
+                confusion_pairs.append({
+                    'true_class': true_class,
+                    'predicted_as': pred_class,
+                    'count': confusion_count,
+                    'rate': confusion_rate
+                })
+    
+    # Sort by confusion rate (highest first)
+    confusion_pairs.sort(key=lambda x: x['rate'], reverse=True)
+    
+    print("\nMost common misclassifications:")
+    for i, pair in enumerate(confusion_pairs[:10]):  # Show top 10
+        print(f"{i+1:2d}. {pair['true_class']} -> {pair['predicted_as']}: "
+              f"{pair['count']} samples ({pair['rate']*100:.1f}%)")
+    
+    # Save confusion analysis
+    with open(os.path.join(output_dir, "evaluation", "confusion_analysis.txt"), 'w', encoding='utf-8') as f:
+        f.write("CLASS CONFUSION ANALYSIS\n")
+        f.write("=" * 50 + "\n\n")
+        f.write("Most common misclassifications (True Class -> Predicted Class):\n\n")
+        
+        for i, pair in enumerate(confusion_pairs):
+            f.write(f"{i+1:2d}. {pair['true_class']} -> {pair['predicted_as']}: "
+                   f"{pair['count']} samples ({pair['rate']*100:.1f}%)\n")
+    
+    return confusion_pairs
+
 def plot_class_accuracies(class_accuracies, output_dir):
     """Plot class-wise accuracies"""
     class_names = [c[0] for c in class_accuracies]
@@ -392,13 +616,29 @@ def evaluate_tflite_model(model_dir, X_test, y_test, class_names):
             
             # Save report to file
             report_filename = f"{model_name.lower().replace(' ', '_')}_report.txt"
-            with open(os.path.join(results_dir, report_filename), 'w') as f:
+            with open(os.path.join(results_dir, report_filename), 'w', encoding='utf-8') as f:
                 f.write(f"Model: {model_name}\n")
                 f.write(f"Accuracy: {accuracy:.4f}\n")
                 f.write(f"Average inference time: {avg_inference_time:.2f} ms per image\n")
                 f.write(f"Model size: {os.path.getsize(tflite_path) / (1024 * 1024):.2f} MB\n\n")
                 f.write("Classification Report:\n")
                 f.write(report)
+                
+                # Add FN/FP analysis for TFLite models
+                print(f"\nGenerating FN/FP analysis for {model_name}...")
+                fn_report_tflite = generate_false_negative_report(y_test, pred_labels, class_names, results_dir)
+                fp_report_tflite = generate_false_positive_report(y_test, pred_labels, class_names, results_dir)
+                
+                f.write("\n\n" + "="*50 + "\n")
+                f.write("FALSE NEGATIVE SUMMARY:\n")
+                for fn in fn_report_tflite:
+                    f.write(f"{fn['true_class']}: {fn['false_negatives']}/{fn['total_samples']} "
+                           f"({fn['fn_rate']*100:.1f}% FN rate)\n")
+                f.write("\n" + "="*50 + "\n")
+                f.write("FALSE POSITIVE SUMMARY:\n")
+                for fp in fp_report_tflite:
+                    f.write(f"{fp['predicted_class']}: {fp['false_positives']}/{fp['total_predictions']} "
+                           f"({fp['fp_rate']*100:.1f}% FP rate, {fp['precision']*100:.1f}% precision)\n")
             
             return predictions
         
@@ -499,6 +739,17 @@ if __name__ == "__main__":
         class_accuracies = calculate_class_accuracies(y_test, pred_labels, class_names)
         plot_class_accuracies(class_accuracies, MODEL_DIR)
         
+        # Generate false negative and false positive reports
+        print("\nGenerating false negative and false positive analysis...")
+        fn_report = generate_false_negative_report(y_test, pred_labels, class_names, MODEL_DIR)
+        fp_report = generate_false_positive_report(y_test, pred_labels, class_names, MODEL_DIR)
+        
+        # Plot FN/FP rates
+        plot_false_negative_positive_rates(fn_report, fp_report, MODEL_DIR)
+        
+        # Generate class confusion analysis
+        confusion_pairs = generate_class_confusion_analysis(y_test, pred_labels, class_names, MODEL_DIR)
+        
         # Generate classification report
         print("\nClassification Report:")
         report = classification_report(y_test, pred_labels, target_names=class_names)
@@ -506,12 +757,22 @@ if __name__ == "__main__":
         
         # Save classification report
         os.makedirs(os.path.join(MODEL_DIR, "evaluation"), exist_ok=True)
-        with open(os.path.join(MODEL_DIR, "evaluation", "classification_report.txt"), 'w') as f:
-            f.write(f"Model: MobileNetV2 96x96 (Full Epochs)\n")
+        with open(os.path.join(MODEL_DIR, "evaluation", "classification_report.txt"), 'w', encoding='utf-8') as f:
+            f.write(f"Model: MobileNetV2 96x96 (Full Epochs with Unknown)\n")
             f.write(f"Test accuracy: {test_accuracy:.4f}\n")
             f.write(f"Test loss: {test_loss:.4f}\n\n")
             f.write("Classification Report:\n")
             f.write(report)
+            f.write("\n\n" + "="*50 + "\n")
+            f.write("FALSE NEGATIVE SUMMARY:\n")
+            for fn in fn_report:
+                f.write(f"{fn['true_class']}: {fn['false_negatives']}/{fn['total_samples']} "
+                       f"({fn['fn_rate']*100:.1f}% FN rate)\n")
+            f.write("\n" + "="*50 + "\n")
+            f.write("FALSE POSITIVE SUMMARY:\n")
+            for fp in fp_report:
+                f.write(f"{fp['predicted_class']}: {fp['false_positives']}/{fp['total_predictions']} "
+                       f"({fp['fp_rate']*100:.1f}% FP rate, {fp['precision']*100:.1f}% precision)\n")
         
         # Visualize predictions
         print("\nGenerating prediction visualizations...")
