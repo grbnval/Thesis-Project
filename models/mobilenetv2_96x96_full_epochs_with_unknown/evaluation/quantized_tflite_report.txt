@@ -1,0 +1,34 @@
+Model: Quantized TFLite
+Accuracy: 0.9035
+Average inference time: 1.64 ms per image
+Model size: 3.36 MB
+
+Classification Report:
+                   precision    recall  f1-score   support
+
+early_blight_leaf       0.97      0.73      0.83       596
+     healthy_leaf       0.95      0.91      0.93       600
+ late_blight_leaf       0.79      0.95      0.87       599
+    septoria_leaf       0.86      0.92      0.89       584
+          unknown       1.00      1.00      1.00       573
+
+         accuracy                           0.90      2952
+        macro avg       0.91      0.90      0.90      2952
+     weighted avg       0.91      0.90      0.90      2952
+
+
+==================================================
+FALSE NEGATIVE SUMMARY:
+early_blight_leaf: 160/596 (26.8% FN rate)
+healthy_leaf: 52/600 (8.7% FN rate)
+late_blight_leaf: 28/599 (4.7% FN rate)
+septoria_leaf: 45/584 (7.7% FN rate)
+unknown: 0/573 (0.0% FN rate)
+
+==================================================
+FALSE POSITIVE SUMMARY:
+early_blight_leaf: 14/450 (3.1% FP rate, 96.9% precision)
+healthy_leaf: 31/579 (5.4% FP rate, 94.6% precision)
+late_blight_leaf: 150/721 (20.8% FP rate, 79.2% precision)
+septoria_leaf: 89/628 (14.2% FP rate, 85.8% precision)
+unknown: 1/574 (0.2% FP rate, 99.8% precision)

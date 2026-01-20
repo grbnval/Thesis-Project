@@ -1,0 +1,62 @@
+Model comparison summary
+
+Models compared:
+- models\squeezenet_96x96_full_epochs_with_unknown
+- models\mobilenetv2_96x96_full_epochs_with_unknown
+- models\mobilenetv2_efficientnet_style_96x96
+
+Key metrics (Keras / Standard TFLite / Quantized TFLite):
+
+1) SqueezeNet 96x96 (Full Epochs with Unknown)
+- Keras Test accuracy: 0.9793
+- Standard TFLite accuracy: 0.9790
+- Standard TFLite avg inference time: 26.25 ms
+- Standard TFLite model size: 2.84 MB
+- Quantized TFLite accuracy: 0.8970
+- Quantized TFLite avg inference time: 7.47 ms
+- Quantized TFLite model size: 3.04 MB
+- Notes: Highest Keras accuracy; quantization caused a large drop in accuracy especially for some classes (late_blight_leaf precision dropped significantly). Septoria has higher FP rate.
+
+2) MobileNetV2 96x96 (Full Epochs with Unknown)
+- Keras Test accuracy: 0.9583
+- Standard TFLite accuracy: 0.9570
+- Standard TFLite avg inference time: 11.25 ms
+- Standard TFLite model size: 3.15 MB
+- Quantized TFLite accuracy: 0.9035
+- Quantized TFLite avg inference time: 1.64 ms
+- Quantized TFLite model size: 3.36 MB
+- Notes: Lower Keras accuracy than SqueezeNet, but faster TFLite inference. Quantized model kept better accuracy than SqueezeNet quantized.
+
+3) MobileNetV2 EfficientNet-style 96x96
+- Keras Test accuracy: 0.9692
+- Standard TFLite accuracy: 0.9651
+- Standard TFLite avg inference time: 10.07 ms
+- Standard TFLite model size: 3.15 MB
+- Quantized TFLite accuracy: 0.9041
+- Quantized TFLite avg inference time: 2.01 ms
+- Quantized TFLite model size: 3.36 MB
+- Notes: Best tradeoff between accuracy and inference time. Quantized accuracy similar to MobileNetV2 baseline.
+
+Recommendations:
+- If highest Keras accuracy is the priority and model size/inference speed are less critical: choose SqueezeNet.
+- If low-latency on-device inference (TFLite) is a priority while keeping good accuracy after quantization: choose MobileNetV2 (either baseline or EfficientNet-style); EfficientNet-style gives a small accuracy gain over baseline.
+- If planning to deploy quantized models, run a per-class analysis (especially for "late_blight_leaf" and "early_blight_leaf") and consider post-training calibration or quantization-aware training to avoid large drops.
+
+Files inspected:
+- models\squeezenet_96x96_full_epochs_with_unknown\evaluation\classification_report.txt
+- models\squeezenet_96x96_full_epochs_with_unknown\evaluation\standard_tflite_report.txt
+- models\squeezenet_96x96_full_epochs_with_unknown\evaluation\quantized_tflite_report.txt
+- models\squeezenet_96x96_full_epochs_with_unknown\evaluation\false_negative_report.txt
+- models\mobilenetv2_96x96_full_epochs_with_unknown\evaluation\classification_report.txt
+- models\mobilenetv2_96x96_full_epochs_with_unknown\evaluation\standard_tflite_report.txt
+- models\mobilenetv2_96x96_full_epochs_with_unknown\evaluation\quantized_tflite_report.txt
+- models\mobilenetv2_96x96_full_epochs_with_unknown\evaluation\false_negative_report.txt
+- models\mobilenetv2_efficientnet_style_96x96\evaluation\evaluation_summary.txt
+- models\mobilenetv2_efficientnet_style_96x96\evaluation\standard_tflite_results.txt
+- models\mobilenetv2_efficientnet_style_96x96\evaluation\quantized_tflite_results.txt
+- models\mobilenetv2_efficientnet_style_96x96\evaluation\false_negative_report.txt
+
+Next steps (optional):
+- Aggregate numeric metrics into a CSV for plotting/comparing programmatically.
+- Run quantization-aware training for the best candidate to reduce quantized accuracy drop.
+- Create a small parity test to confirm preprocessed .npy vs on-the-fly preprocessing equivalence for a sample of images.

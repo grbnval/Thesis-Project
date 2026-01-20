@@ -1,0 +1,32 @@
+FALSE NEGATIVE ANALYSIS REPORT
+==================================================
+
+Class: early_blight_leaf
+False Negatives: 74/596 (0.124)
+Most commonly confused with:
+  -> septoria_leaf: 48 samples (64.9%)
+  -> late_blight_leaf: 15 samples (20.3%)
+  -> healthy_leaf: 11 samples (14.9%)
+
+Class: healthy_leaf
+False Negatives: 1/600 (0.002)
+Most commonly confused with:
+  -> septoria_leaf: 1 samples (100.0%)
+
+Class: late_blight_leaf
+False Negatives: 17/599 (0.028)
+Most commonly confused with:
+  -> septoria_leaf: 11 samples (64.7%)
+  -> early_blight_leaf: 6 samples (35.3%)
+
+Class: septoria_leaf
+False Negatives: 7/584 (0.012)
+Most commonly confused with:
+  -> healthy_leaf: 5 samples (71.4%)
+  -> early_blight_leaf: 1 samples (14.3%)
+  -> late_blight_leaf: 1 samples (14.3%)
+
+Class: unknown
+False Negatives: 0/573 (0.000)
+Most commonly confused with:
+

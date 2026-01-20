@@ -1,0 +1,245 @@
+what does this code do?
+
+# ==============================
+# 🧠 Leaf Disease Classification with Inference Time Display
+# ==============================
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+import tensorflow as tf
+
+# Load your trained model
+model = tf.keras.models.load_model('/content/drive/MyDrive/Thesis/model/best_model_squeezenet.h5')
+
+# Define labels
+class_names = ["early_blight_leaf", "healthy_leaf", "late_blight_leaf", "septoria_leaf", "unknown"]
+
+# Install dependencies
+!pip install opencv-python requests
+
+# Import libraries
+import cv2
+import numpy as np
+from PIL import Image
+import os, time
+from datetime import datetime
+import requests
+import json
+
+# Check model and info
+try:
+    print(f"✅ Model found: {type(model)}")
+    print(f"✅ Class names: {class_names}")
+
+    input_shape = model.input_shape[1:3]
+    print(f"📊 Model input shape: {input_shape}")
+except NameError:
+    print("❌ Model or class_names not found! Loading again...")
+    from tensorflow import keras
+    model_path = '/content/drive/MyDrive/Thesis/model/best_model_squeezenet.h5'
+    class_names = ['early_blight_leaf', 'healthy_leaf', 'late_blight_leaf', 'septoria_leaf', 'unknown']
+    model = keras.models.load_model(model_path)
+    input_shape = model.input_shape[1:3]
+    print(f"✅ Model reloaded successfully! Shape: {input_shape}")
+
+# Confidence threshold
+CONF_THRESHOLD = 0.7
+print(f"⚖️  Confidence threshold: {CONF_THRESHOLD}")
+
+# Google Apps Script endpoint
+GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTPlV5p4NDaX92DOmkl5GZRoleslxqz0zj42fKQPWIgSFS0EanYJeIDG57l1Yx9aa4Pg/exec"
+
+# ======================================
+# 📡 Send classification result to Google Sheet / Blynk
+# ======================================
+def send_result_to_google_script(image_name, predicted_class, confidence, top3_predictions, timestamp, inference_time):
+    """Send classification result to Google Apps Script"""
+    try:
+        top3_str = ", ".join([f"{cls}: {prob:.3f}" for cls, prob in top3_predictions])
+        data = {
+            'action': 'store_result',
+            'image_name': image_name,
+            'predicted_class': predicted_class,
+            'confidence': f"{confidence:.4f}",
+            'top3': top3_str,
+            'timestamp': timestamp,
+            'inference_time': f"{inference_time:.4f}"
+        }
+
+        response = requests.post(GOOGLE_SCRIPT_URL, data=data, timeout=30)
+
+        if response.status_code == 200:
+            print(f"   ✅ Result sent to Google Script successfully")
+            return True
+        else:
+            print(f"   ❌ Failed to send result: HTTP {response.status_code}")
+            return False
+
+    except Exception as e:
+        print(f"   ❌ Error sending result to Google Script: {e}")
+        return False
+
+# ======================================
+# 🧪 Preprocessing Function
+# ======================================
+def preprocess_image(image_path, target_size=(96, 96)):
+    """Preprocess image exactly as training"""
+    img = cv2.imread(image_path)
+    if img is None:
+        print(f"Error: Could not read image {image_path}")
+        return None
+
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = cv2.resize(img, target_size)
+
+    # CLAHE enhancement
+    lab = cv2.cvtColor(img, cv2.COLOR_RGB2LAB)
+    l, a, b = cv2.split(lab)
+    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8,8))
+    cl = clahe.apply(l)
+    enhanced = cv2.merge((cl,a,b))
+    img = cv2.cvtColor(enhanced, cv2.COLOR_LAB2RGB)
+
+    img = img.astype('float32') / 255.0
+    return np.expand_dims(img, axis=0)
+
+# ======================================
+# 🔍 Classification Function (with inference time)
+# ======================================
+def classify_image(image_path, result_path):
+    """Classify an image and display inference time"""
+
+    img = preprocess_image(image_path, target_size=input_shape)
+    if img is None:
+        return
+
+    # Measure inference time
+    start_time = time.time()
+    prediction = model.predict(img, verbose=0)[0]
+    end_time = time.time()
+    inference_time = end_time - start_time  # seconds
+
+    class_id = int(np.argmax(prediction))
+    confidence = float(prediction[class_id])
+
+    # Apply confidence threshold
+    if confidence < CONF_THRESHOLD:
+        result = "unknown"
+        result_confidence = confidence
+    else:
+        result = class_names[class_id]
+        result_confidence = confidence
+
+    # Top 3 predictions
+    top3_idx = np.argsort(prediction)[-3:][::-1]
+    top3 = [(class_names[i], float(prediction[i])) for i in top3_idx]
+
+    current_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    image_name = os.path.basename(image_path)
+
+    # Save results
+    base = os.path.basename(image_path).split('.')[0]
+    txt_path = os.path.join(result_path, f"{base}_result.txt")
+    os.makedirs(os.path.dirname(txt_path), exist_ok=True)
+
+    with open(txt_path, "w") as f:
+        f.write(f"Image: {image_name}\n")
+        f.write(f"Timestamp: {current_timestamp}\n")
+        f.write(f"Inference time: {inference_time:.4f} seconds\n")
+        f.write(f"Predicted class: {result} (confidence: {result_confidence:.4f})\n")
+        f.write(f"Raw prediction: {class_names[class_id]} ({confidence:.4f})\n")
+        f.write(f"Confidence threshold: {CONF_THRESHOLD}\n\n")
+        f.write("All class probabilities:\n")
+        for cls, prob in zip(class_names, prediction):
+            f.write(f"  {cls}: {prob:.4f} ({prob*100:.1f}%)\n")
+        f.write("\nTop 3 predictions:\n")
+        for cls, prob in top3:
+            f.write(f"  {cls}: {prob:.4f} ({prob*100:.1f}%)\n")
+
+    # Console output
+    print(f"📸 {image_name}")
+    print(f"   🕒 Inference time: {inference_time:.4f} seconds")
+    print(f"   Final: {result} ({result_confidence:.3f})")
+    print(f"   Raw: {class_names[class_id]} ({confidence:.3f})")
+    print(f"   Top3: {[(cls, f'{prob:.3f}') for cls, prob in top3]}")
+
+    # Send result to Google Script
+    send_result_to_google_script(
+        image_name=image_name,
+        predicted_class=result,
+        confidence=result_confidence,
+        top3_predictions=top3,
+        timestamp=current_timestamp,
+        inference_time=inference_time
+    )
+    print()
+
+# ======================================
+# 🧪 Test Preprocessing
+# ======================================
+def test_preprocessing():
+    print("🧪 Testing preprocessing...")
+    test_images = []
+
+    test_paths = [
+        '/content/drive/MyDrive/Thesis/test_images',
+        '/content/drive/MyDrive/Thesis/images',
+        '/content/drive/MyDrive/Thesis/samples'
+    ]
+
+    for path in test_paths:
+        if os.path.exists(path):
+            for file in os.listdir(path)[:3]:
+                if file.lower().endswith(('.jpg', '.jpeg', '.png')):
+                    test_images.append(os.path.join(path, file))
+
+    if test_images:
+        print(f"Testing with {len(test_images)} sample images...")
+        for img_path in test_images:
+            classify_image(img_path, "/tmp/test_results")
+    else:
+        print("No test images found. Upload some images to test.")
+
+# ======================================
+# 🚀 Start Monitoring
+# ======================================
+images_path = '/content/drive/MyDrive/Thesis/images'
+results_path = '/content/drive/MyDrive/Thesis/results'
+os.makedirs(results_path, exist_ok=True)
+
+test_preprocessing()
+
+processed = set()
+print("\n🔍 Watching image folders... (press Stop to end)")
+print(f"Monitoring: {images_path}")
+print(f"Results: {results_path}")
+print(f"Confidence threshold: {CONF_THRESHOLD}\n")
+
+try:
+    while True:
+        new_files = 0
+        for root, _, files in os.walk(images_path):
+            for file in files:
+                if file.lower().endswith(('.jpg', '.jpeg', '.png')):
+                    image_path = os.path.join(root, file)
+
+                    rel_path = os.path.relpath(root, images_path)
+                    save_folder = os.path.join(results_path, rel_path)
+                    os.makedirs(save_folder, exist_ok=True)
+
+                    base = os.path.splitext(file)[0]
+                    txt_path = os.path.join(save_folder, f"{base}_result.txt")
+
+                    if image_path not in processed and not os.path.exists(txt_path):
+                        classify_image(image_path, save_folder)
+                        processed.add(image_path)
+                        new_files += 1
+
+        if new_files == 0:
+            print(".", end="", flush=True)
+
+        time.sleep(2)
+
+except KeyboardInterrupt:
+    print(f"\n✅ Stopped monitoring. Processed {len(processed)} images total.")

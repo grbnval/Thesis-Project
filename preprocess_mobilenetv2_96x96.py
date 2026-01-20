@@ -12,17 +12,21 @@ def check_dataset(input_dir):
         print("├── healthy_leaf/")
         print("├── early_blight_leaf/")
         print("├── late_blight_leaf/")
-        print("└── septoria_leaf/")
+        print("├── septoria_leaf/")
+        print("└── unknown/")
         return False
         
     image_count = 0
-    for class_name in os.listdir(input_dir):
+    class_folders = []
+    for class_name in sorted(os.listdir(input_dir)):
         class_path = os.path.join(input_dir, class_name)
         if os.path.isdir(class_path):
             images = [f for f in os.listdir(class_path) 
                      if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
-            image_count += len(images)
-            print(f"Found {len(images)} images in {class_name}/")
+            if len(images) > 0:
+                class_folders.append(class_name)
+                image_count += len(images)
+                print(f"Found {len(images)} images in {class_name}/")
     
     if image_count == 0:
         print("\nNo images found! Please add images to the appropriate folders:")
@@ -30,9 +34,11 @@ def check_dataset(input_dir):
         print("2. Put early blight images in 'early_blight_leaf/'")
         print("3. Put late blight images in 'late_blight_leaf/'")
         print("4. Put septoria leaf images in 'septoria_leaf/'")
+        print("5. Put unknown/random object images in 'unknown/'")
         return False
-        
+    
     print(f"\nTotal images found: {image_count}")
+    print(f"Classes detected: {class_folders}")
     return True
 
 def preprocess_image(image_path, target_size=(96, 96)):
@@ -63,21 +69,24 @@ def preprocess_image(image_path, target_size=(96, 96)):
 
 def process_dataset(input_dir, output_dir, target_size=(96, 96)):
     """Process entire dataset with progress bar"""
-    # Count total images
+    # Count total images and get all class folders
     total_images = 0
-    for class_name in os.listdir(input_dir):
+    class_folders = []
+    for class_name in sorted(os.listdir(input_dir)):
         class_path = os.path.join(input_dir, class_name)
         if os.path.isdir(class_path):
             images = [f for f in os.listdir(class_path) 
                      if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
-            total_images += len(images)
+            if len(images) > 0:
+                class_folders.append(class_name)
+                total_images += len(images)
+    
+    print(f"Processing {len(class_folders)} classes: {class_folders}")
     
     # Process each class
     with tqdm(total=total_images, desc="Processing images") as pbar:
-        for class_name in os.listdir(input_dir):
+        for class_name in class_folders:
             class_path = os.path.join(input_dir, class_name)
-            if not os.path.isdir(class_path):
-                continue
                 
             # Create output class directory
             output_class_path = os.path.join(output_dir, class_name)
@@ -112,8 +121,10 @@ if __name__ == "__main__":
         exit(1)
     
     print("\nStarting preprocessing...")
+    print("Will automatically process all class folders found in raw_dataset/")
     os.makedirs(processed_dir, exist_ok=True)
     process_dataset(raw_dir, processed_dir, target_size=(96, 96))
     print("\nPreprocessing complete!")
     print(f"Processed images saved to: {processed_dir}")
     print("=== PREPROCESSING COMPLETED SUCCESSFULLY ===")
+    print("\nNote: All models should now be retrained to include the new classes.")

@@ -1,0 +1,153 @@
+// 🟢 CONFIG
+var RESULTS_FOLDER_ID = "1u27-Se-cx42NwsdN4I0WTM5dP20s2mUo";  // your Results folder
+var BLYNK_TOKEN = "YHFAfEPwtZSXIYlEqtz902mmIZSw6UxU";  // put your Blynk token here
+
+// 🔥 ADD: Web App Entry Points for ESP32-CAM
+function doGet(e) {
+  try {
+    const action = e.parameter.action || 'check_results';
+    
+    if (action === 'check_results') {
+      checkNewResults();
+      return ContentService.createTextOutput('Results checked and sent to Blynk');
+    } else if (action === 'get_latest_result') {
+      // For ESP32-CAM compatibility - but checkNewResults handles Blynk directly
+      return ContentService.createTextOutput(JSON.stringify({
+        status: 'handled_by_script',
+        message: 'Results are automatically sent to Blynk by checkNewResults script'
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    return ContentService.createTextOutput('Invalid action');
+  } catch (error) {
+    Logger.log('Error in doGet:', error);
+    return ContentService.createTextOutput('GET Error: ' + error.toString());
+  }
+}
+
+function doPost(e) {
+  try {
+    const action = e.parameter.action || 'upload_image';
+    
+    if (action === 'upload_image') {
+      return uploadImage(e);
+    }
+    
+    return ContentService.createTextOutput('Invalid POST action');
+  } catch (error) {
+    Logger.log('Error in doPost:', error);
+    return ContentService.createTextOutput('POST Error: ' + error.toString());
+  }
+}
+
+// 🔥 ADD: Image Upload Function for ESP32-CAM
+function uploadImage(e) {
+  try {
+    const name = Utilities.formatDate(new Date(), 'GMT+7', 'yyyyMMdd-HHmmss') + '.jpg';
+    const parentFolderName = "Thesis";
+    const imagesFolderName = "images";
+    const data = Utilities.base64Decode(e.postData.contents);
+    const blob = Utilities.newBlob(data, 'image/jpg', name);
+
+    // 🔍 Find or create Thesis folder
+    let thesisFolder;
+    const thesisFolders = DriveApp.getFoldersByName(parentFolderName);
+    if (thesisFolders.hasNext()) {
+      thesisFolder = thesisFolders.next();
+    } else {
+      thesisFolder = DriveApp.createFolder(parentFolderName);
+    }
+
+    // 🔍 Find or create "images" subfolder inside Thesis
+    let imagesFolder;
+    const imgFolders = thesisFolder.getFoldersByName(imagesFolderName);
+    if (imgFolders.hasNext()) {
+      imagesFolder = imgFolders.next();
+    } else {
+      imagesFolder = thesisFolder.createFolder(imagesFolderName);
+    }
+
+    // Save file directly in the images folder (no date subfolders)
+    const file = imagesFolder.createFile(blob);
+    
+    Logger.log('Image uploaded successfully: ' + file.getName() + ' to images folder');
+    return ContentService.createTextOutput('Done');
+    
+  } catch (error) {
+    Logger.log('Error in uploadImage:', error);
+    return ContentService.createTextOutput('Upload Error: ' + error.toString());
+  }
+}
+
+// Main function to check new files
+function checkNewResults() {
+  var folder = DriveApp.getFolderById(RESULTS_FOLDER_ID);
+  var files = folder.getFiles();
+  var scriptProperties = PropertiesService.getScriptProperties();
+  var lastProcessed = scriptProperties.getProperty("LAST_PROCESSED");
+
+  var newestFile = null;
+  var newestDate = 0;
+
+  while (files.hasNext()) {
+    var file = files.next();
+
+    if (file.getName().toLowerCase().endsWith(".txt")) {
+      var created = file.getDateCreated().getTime();
+
+      if (created > newestDate) {
+        newestDate = created;
+        newestFile = file;
+      }
+    }
+  }
+
+  if (newestFile && newestFile.getId() !== lastProcessed) {
+    var content = newestFile.getBlob().getDataAsString();
+    sendToBlynk(content);
+
+    // Save as last processed
+    scriptProperties.setProperty("LAST_PROCESSED", newestFile.getId());
+    Logger.log("Processed new file: " + newestFile.getName());
+  } else {
+    Logger.log("No new file found.");
+  }
+}
+
+// Function to send parsed data to Blynk
+function sendToBlynk(resultText) {
+  // Extract fields
+  var imageName = resultText.match(/Image:\s*(.+)/)[1].trim();
+  var predictedClass = resultText.match(/Predicted class:\s*(.+?)\s*\(/)[1];
+  var confidence = resultText.match(/confidence:\s*([\d.]+)/)[1];
+  var timestamp = resultText.match(/Timestamp:\s*(.+)/)[1];
+
+  // Map to readable names
+  var diseaseMap = {
+    "late_blight_leaf": "Late Blight",
+    "early_blight_leaf": "Early Blight",
+    "healthy_leaf": "Healthy",
+    "septoria_leaf": "Septoria",
+    "unknown": "Unknown"
+  };
+  var readableClass = diseaseMap[predictedClass] || predictedClass;
+
+  // Build API requests
+  var urls = [
+    "https://blynk.cloud/external/api/update?token=" + BLYNK_TOKEN + "&V6=" + encodeURIComponent(readableClass),
+    "https://blynk.cloud/external/api/update?token=" + BLYNK_TOKEN + "&V7=" + encodeURIComponent(confidence),
+    "https://blynk.cloud/external/api/update?token=" + BLYNK_TOKEN + "&V8=" + encodeURIComponent(timestamp),
+    "https://blynk.cloud/external/api/update?token=" + BLYNK_TOKEN + "&V9=" + encodeURIComponent(imageName),
+    "https://blynk.cloud/external/api/update?token=" + BLYNK_TOKEN + "&V10=" + encodeURIComponent((readableClass === "Healthy") ? "Healthy" : "Diseased")
+  ];
+
+  // Send to Blynk
+  urls.forEach(function(url) {
+    try {
+      var response = UrlFetchApp.fetch(url);
+      Logger.log("Sent to Blynk: " + url + " → " + response.getContentText());
+    } catch (e) {
+      Logger.log("Error sending to Blynk: " + e);
+    }
+  });
+}

@@ -1,0 +1,11 @@
+model,keras_accuracy,standard_tflite_accuracy,standard_inference_ms,standard_model_size_mb,quantized_tflite_accuracy,quantized_inference_ms,quantized_model_size_mb
+efficientnet_lite_300x300,,,,,,,
+mobilenetv2_300x300_separate,,,,,,,
+mobilenetv2_96x96,,,,,,,
+mobilenetv2_96x96_full_epochs,0.915,0.9075,8.88,3.15,0.86,1.61,3.36
+mobilenetv2_96x96_full_epochs_100,0.84,0.83,7.93,3.15,0.805,1.39,3.36
+mobilenetv2_96x96_full_epochs_with_unknown,0.9583,0.957,11.25,3.15,0.9035,1.64,3.36
+mobilenetv2_efficientnet_style_96x96,0.9692000000000001,0.9651,,,0.9041,,
+squeezenet_300x300,,,,,,,
+squeezenet_96x96_full_epochs_100,0.7075,,,,,,
+squeezenet_96x96_full_epochs_with_unknown,0.9793,0.979,26.25,2.84,0.897,7.47,3.04

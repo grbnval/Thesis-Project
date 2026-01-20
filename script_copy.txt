@@ -1,0 +1,40 @@
+function doPost(e) {
+  const name = Utilities.formatDate(new Date(), 'GMT+7', 'yyyyMMdd-HHmmss') + '.jpg';  // Change GMT+7 with your timezone
+  const subFolderName = Utilities.formatDate(new Date(), 'GMT+7', 'yyyyMMdd');
+  const parentFolderName = "Thesis";
+  const imagesFolderName = "images";
+  const data = Utilities.base64Decode(e.postData.contents);
+  const blob = Utilities.newBlob(data, 'image/jpg', name);
+
+  // 🔍 Find or create Thesis folder
+  let thesisFolder;
+  const thesisFolders = DriveApp.getFoldersByName(parentFolderName);
+  if (thesisFolders.hasNext()) {
+    thesisFolder = thesisFolders.next();
+  } else {
+    thesisFolder = DriveApp.createFolder(parentFolderName);
+  }
+
+  // 🔍 Find or create "images" subfolder inside Thesis
+  let imagesFolder;
+  const imgFolders = thesisFolder.getFoldersByName(imagesFolderName);
+  if (imgFolders.hasNext()) {
+    imagesFolder = imgFolders.next();
+  } else {
+    imagesFolder = thesisFolder.createFolder(imagesFolderName);
+  }
+
+  // 🔍 Find or create date-based subfolder inside Thesis/images
+  let subFolder;
+  const subFolders = imagesFolder.getFoldersByName(subFolderName);
+  if (subFolders.hasNext()) {
+    subFolder = subFolders.next();
+  } else {
+    subFolder = imagesFolder.createFolder(subFolderName);
+  }
+
+  // Save file in the correct place
+  const file = subFolder.createFile(blob);
+
+  return ContentService.createTextOutput('Done');
+}

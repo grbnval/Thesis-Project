@@ -1,0 +1,4 @@
+Model,Accuracy,Precision,Recall,F1-score
+MobileNetV2 96x96,0.9583,0.96,0.96,0.96
+MobileNetV2 EfficientNet-style 96x96,0.9692,0.9705,0.9692,0.9689
+SqueezeNet 96x96,0.9793,0.98,0.98,0.98

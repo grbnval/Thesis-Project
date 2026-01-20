@@ -1,0 +1,32 @@
+FALSE POSITIVE ANALYSIS REPORT
+==================================================
+
+Predicted Class: early_blight_leaf
+False Positives: 7/529 (0.013)
+Actually was:
+  <- late_blight_leaf: 6 samples (85.7%)
+  <- septoria_leaf: 1 samples (14.3%)
+
+Predicted Class: healthy_leaf
+False Positives: 16/615 (0.026)
+Actually was:
+  <- early_blight_leaf: 11 samples (68.8%)
+  <- septoria_leaf: 5 samples (31.2%)
+
+Predicted Class: late_blight_leaf
+False Positives: 16/598 (0.027)
+Actually was:
+  <- early_blight_leaf: 15 samples (93.8%)
+  <- septoria_leaf: 1 samples (6.2%)
+
+Predicted Class: septoria_leaf
+False Positives: 60/637 (0.094)
+Actually was:
+  <- early_blight_leaf: 48 samples (80.0%)
+  <- late_blight_leaf: 11 samples (18.3%)
+  <- healthy_leaf: 1 samples (1.7%)
+
+Predicted Class: unknown
+False Positives: 0/573 (0.000)
+Actually was:
+

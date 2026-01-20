@@ -1,0 +1,32 @@
+MOBILENETV2 EFFICIENTNET STYLE MODEL EVALUATION REPORT
+============================================================
+
+Model Directory: c:\Users\Azief\Documents\GitHub\Thesis-Project\models/mobilenetv2_efficientnet_style_96x96
+Test Dataset: c:\Users\Azief\Documents\GitHub\Thesis-Project\processed_test_96x96
+Model Type: MobileNetV2 (EfficientNet-style)
+Training Date: 2025-10-05 05:55:22
+Image Size: 96x96
+Number of Classes: 5
+Total Test Samples: 2952
+
+Overall Accuracy: 0.9665
+
+Class-wise Accuracies:
+early_blight_leaf: 0.8758
+healthy_leaf: 0.9983
+late_blight_leaf: 0.9716
+septoria_leaf: 0.9880
+unknown: 1.0000
+
+Classification Report:
+                   precision    recall  f1-score   support
+
+early_blight_leaf       0.99      0.88      0.93       596
+     healthy_leaf       0.97      1.00      0.99       600
+ late_blight_leaf       0.97      0.97      0.97       599
+    septoria_leaf       0.91      0.99      0.95       584
+          unknown       1.00      1.00      1.00       573
+
+         accuracy                           0.97      2952
+        macro avg       0.97      0.97      0.97      2952
+     weighted avg       0.97      0.97      0.97      2952
